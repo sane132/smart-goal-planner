@@ -1,0 +1,70 @@
+/* src/styles/GoalForm.css */
+.goal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fdfdfd;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    width: 100%; /* Ensure full width */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end; /* Align buttons to the right */
+    margin-top: 10px;
+}
+
+.goal-form button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s ease;
+}
+
+.goal-form button:hover {
+    background-color: #0056b3;
+}
+
+.goal-form button[type="button"] { /* For cancel button */
+    background-color: #6c757d;
+}
+
+.goal-form button[type="button"]:hover {
+    background-color: #5a6268;
+}
+
+.form-error {
+    color: #dc3545;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+    text-align: center;
+}

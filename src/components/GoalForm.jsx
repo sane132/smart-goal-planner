@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import axios from 'axios'
 
-export default function GoalForm({ onGoalAdded }) {
+export default function GoalForm({ setGoals }) {
   const [formData, setFormData] = useState({
     name: '',
     targetAmount: '',
@@ -11,9 +10,25 @@ export default function GoalForm({ onGoalAdded }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    await axios.post('http://localhost:3000/goals', formData)
-    onGoalAdded()
-    setFormData({ name: '', targetAmount: '', category: 'Travel', deadline: '' })
+    
+    const response = await fetch('http://localhost:3000/goals', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+    
+    const newGoal = await response.json()
+    setGoals(prev => [...prev, newGoal])
+    
+    // Reset form
+    setFormData({
+      name: '',
+      targetAmount: '',
+      category: 'Travel',
+      deadline: ''
+    })
   }
 
   return (

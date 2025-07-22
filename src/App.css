@@ -1,0 +1,91 @@
+/* Basic Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.app {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Forms */
+.goal-form, .deposit-form {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+input, select {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+button {
+  padding: 0.75rem 1.5rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+.delete-btn {
+  background: #dc3545;
+}
+
+.delete-btn:hover {
+  background: #a71d2a;
+}
+
+/* Goals List */
+.goals-container {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.goal-card {
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Progress Bar */
+.progress-bar {
+  height: 1rem;
+  background: #e9ecef;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #28a745;
+  transition: width 0.5s ease;
+}
+
+/* Utility Classes */
+.loading, .error {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.25rem;
+}
+
+.error {
+  color: #dc3545;
+}

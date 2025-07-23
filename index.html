@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart Goal Planner</title>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+    <script>
+      sessionStorage.redirect = location.href;
+      location.replace('/smart-goal-planner/');
+    </script>
   </head>
   <body>
-    <div id="root"></div>
-    
-    <script type="module" src="/src/main.jsx"></script>
+    <h1>Redirecting...</h1>
+    <a href="/smart-goal-planner/">Click here if not redirected</a>
   </body>
 </html>

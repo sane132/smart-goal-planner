@@ -81,6 +81,12 @@ function App() {
       setIsLoading(false);
     }
   };
+useEffect(() => {
+  fetch('http://localhost:3000/goals')
+    .then(res => res.json())
+    .then(data => setGoals(data))
+    .catch(err => console.error('Failed to fetch goals:', err));
+}, []);
 
   // Delete goal
   const handleDelete = async (goalId) => {

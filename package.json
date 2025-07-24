@@ -7,9 +7,8 @@
   "dev": "vite",
   "build": "vite build",
   "preview": "vite preview",
-  "start": "node server.js",
-  "serve-api": "json-server --watch db.json --port 3000",
-  "deploy": "gh-pages -d dist"
+  "start": "node server.js", 
+  "serve:api": "json-server --watch db.json --port 3000" 
 },
   "homepage": "https://sane132.github.io/smart-goal-planner",
   "dependencies": {

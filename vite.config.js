@@ -3,15 +3,14 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/smart-goal-planner/', // Must match repo name exactly
+  base: '/smart-goal-planner/',
+  server: {
+    proxy: {
+      '/api': 'http://localhost:3000' // Proxy API requests in development
+    }
+  },
   build: {
     outDir: 'dist',
-    assetsDir: 'assets',
-    emptyOutDir: true,
-    rollupOptions: {
-      output: {
-        assetFileNames: 'assets/[name]-[hash][extname]'
-      }
-    }
+    emptyOutDir: true
   }
 });

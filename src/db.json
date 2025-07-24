@@ -17,6 +17,15 @@
       "category": "Emergency",
       "deadline": "2026-06-30",
       "createdAt": "2023-05-01"
+    },
+    {
+      "id": "ee9f",
+      "name": "Save ",
+      "targetAmount": 100,
+      "category": "Emergency",
+      "deadline": "2025-08-29",
+      "savedAmount": 100,
+      "createdAt": "2025-07-24"
     }
   ]
 }

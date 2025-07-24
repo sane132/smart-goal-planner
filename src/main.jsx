@@ -1,11 +1,18 @@
-// src/main.jsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.jsx';
-import './index.css'; // optional, but must exist if imported
+import App from './App';
+import './index.css'; // If you have global styles
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+// Import any necessary providers if you're using them
+// For example, if you use React Router:
+// import { BrowserRouter } from 'react-router-dom';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
   <React.StrictMode>
-    <App />
+    {/* Wrap with providers if needed, e.g.: */}
+    {/* <BrowserRouter> */}
+      <App />
+    {/* </BrowserRouter> */}
   </React.StrictMode>
 );

@@ -1,77 +1,115 @@
-import React from 'react';
-import { useState } from 'react';
-import { useGoals } from './hooks/useGoals';
+import { useState, useEffect } from 'react';
 import GoalList from './components/GoalList';
 import GoalForm from './components/GoalForm';
 import DepositForm from './components/DepositForm';
 import Overview from './components/Overview';
-import './index.css';
+import './App.css';
 
 function App() {
-  const { goals, loading, error, addGoal, updateGoal, deleteGoal } = useGoals();
+  const [goals, setGoals] = useState([]);
   const [selectedGoal, setSelectedGoal] = useState(null);
 
-  const handleAddGoal = async (goalData) => {
-    await addGoal(goalData);
+  useEffect(() => {
+    fetchGoals();
+  }, []);
+
+  const fetchGoals = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/goals');
+      const data = await response.json();
+      setGoals(data);
+    } catch (error) {
+      console.error('Error fetching goals:', error);
+    }
   };
 
-  const handleUpdateGoal = async (id, updates) => {
-    await updateGoal(id, updates);
-    setSelectedGoal(null);
+  const addGoal = async (newGoal) => {
+    try {
+      const response = await fetch('http://localhost:3000/goals', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newGoal),
+      });
+      const data = await response.json();
+      setGoals([...goals, data]);
+    } catch (error) {
+      console.error('Error adding goal:', error);
+    }
   };
 
-  const handleDeleteGoal = async (id) => {
-    await deleteGoal(id);
+  const updateGoal = async (updatedGoal) => {
+    try {
+      await fetch(`http://localhost:3000/goals/${updatedGoal.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedGoal),
+      });
+      setGoals(goals.map(goal => goal.id === updatedGoal.id ? updatedGoal : goal));
+      setSelectedGoal(null);
+    } catch (error) {
+      console.error('Error updating goal:', error);
+    }
   };
 
-  const handleDeposit = async (goalId, amount) => {
-    const goal = goals.find(g => g.id === goalId);
-    if (!goal) return;
-    
-    const newAmount = Number(goal.savedAmount) + Number(amount);
-    await updateGoal(goalId, { savedAmount: newAmount });
+  const deleteGoal = async (id) => {
+    try {
+      await fetch(`http://localhost:3000/goals/${id}`, {
+        method: 'DELETE',
+      });
+      setGoals(goals.filter(goal => goal.id !== id));
+    } catch (error) {
+      console.error('Error deleting goal:', error);
+    }
   };
 
-  if (loading) return <div className="loading">Loading goals...</div>;
-  if (error) return <div className="error">Error: {error}</div>;
+  const makeDeposit = async (goalId, amount) => {
+    try {
+      const goalToUpdate = goals.find(goal => goal.id === goalId);
+      const updatedGoal = {
+        ...goalToUpdate,
+        savedAmount: Number(goalToUpdate.savedAmount) + Number(amount)
+      };
+      
+      await fetch(`http://localhost:3000/goals/${goalId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ savedAmount: updatedGoal.savedAmount }),
+      });
+      
+      setGoals(goals.map(goal => goal.id === goalId ? updatedGoal : goal));
+    } catch (error) {
+      console.error('Error making deposit:', error);
+    }
+  };
 
   return (
-    <div className="app-container">
-      <header>
-        <h1>Smart Goal Planner</h1>
-      </header>
-      
-      <main>
+    <div className="app">
+      <h1>Smart Goal Planner</h1>
+      <div className="dashboard">
         <Overview goals={goals} />
-        
-        <div className="management-section">
-          <div className="forms-container">
+        <div className="goal-management">
+          <div className="forms">
             <GoalForm 
-              onSubmit={selectedGoal ? 
-                (data) => handleUpdateGoal(selectedGoal.id, data) : 
-                handleAddGoal}
-              initialData={selectedGoal || {
-                name: '',
-                targetAmount: '',
-                category: 'Travel',
-                deadline: ''
-              }}
-              onCancel={() => setSelectedGoal(null)}
+              addGoal={addGoal} 
+              updateGoal={updateGoal} 
+              selectedGoal={selectedGoal} 
+              setSelectedGoal={setSelectedGoal} 
             />
-            
-            <DepositForm 
-              goals={goals.filter(g => g.savedAmount < g.targetAmount)} 
-              onSubmit={handleDeposit} 
-            />
+            <DepositForm goals={goals} makeDeposit={makeDeposit} />
           </div>
-          
           <GoalList 
             goals={goals} 
-            onEdit={setSelectedGoal} 
-            onDelete={handleDeleteGoal} 
+            deleteGoal={deleteGoal} 
+            setSelectedGoal={setSelectedGoal} 
           />
         </div>
-      </main>
+      </div>
     </div>
   );
 }

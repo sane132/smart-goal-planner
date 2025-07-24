@@ -1,39 +1,61 @@
-
 import { useState, useEffect } from 'react';
 
-export default function GoalForm({ onSubmit, initialData, onCancel }) {
-  const [formData, setFormData] = useState(initialData);
-  
+function GoalForm({ addGoal, updateGoal, selectedGoal, setSelectedGoal }) {
+  const [formData, setFormData] = useState({
+    name: '',
+    targetAmount: '',
+    category: 'Travel',
+    deadline: '',
+  });
+
   useEffect(() => {
-    setFormData(initialData);
-  }, [initialData]);
+    if (selectedGoal) {
+      setFormData({
+        name: selectedGoal.name,
+        targetAmount: selectedGoal.targetAmount,
+        category: selectedGoal.category,
+        deadline: selectedGoal.deadline.split('T')[0],
+      });
+    }
+  }, [selectedGoal]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({
-      name: formData.name,
+    const goalData = {
+      ...formData,
       targetAmount: Number(formData.targetAmount),
-      category: formData.category,
-      deadline: formData.deadline
-    });
-    if (!initialData.id) {
-      setFormData(initialData);
+      savedAmount: 0,
+      createdAt: new Date().toISOString().split('T')[0],
+    };
+
+    if (selectedGoal) {
+      updateGoal({ ...selectedGoal, ...goalData });
+    } else {
+      addGoal(goalData);
     }
+
+    setFormData({
+      name: '',
+      targetAmount: '',
+      category: 'Travel',
+      deadline: '',
+    });
   };
 
   return (
-    <form className="goal-form" onSubmit={handleSubmit}>
-      <h2>{initialData.id ? 'Edit Goal' : 'Add New Goal'}</h2>
-      
+    <form onSubmit={handleSubmit} className="goal-form">
+      <h2>{selectedGoal ? 'Edit Goal' : 'Add New Goal'}</h2>
       <div className="form-group">
-        <label htmlFor="name">Goal Name</label>
+        <label>Goal Name:</label>
         <input
-          id="name"
           type="text"
           name="name"
           value={formData.name}
@@ -41,24 +63,20 @@ export default function GoalForm({ onSubmit, initialData, onCancel }) {
           required
         />
       </div>
-      
       <div className="form-group">
-        <label htmlFor="targetAmount">Target Amount ($)</label>
+        <label>Target Amount ($):</label>
         <input
-          id="targetAmount"
           type="number"
           name="targetAmount"
-          min="1"
           value={formData.targetAmount}
           onChange={handleChange}
+          min="1"
           required
         />
       </div>
-      
       <div className="form-group">
-        <label htmlFor="category">Category</label>
+        <label>Category:</label>
         <select
-          id="category"
           name="category"
           value={formData.category}
           onChange={handleChange}
@@ -75,26 +93,24 @@ export default function GoalForm({ onSubmit, initialData, onCancel }) {
           <option value="Home">Home</option>
         </select>
       </div>
-      
       <div className="form-group">
-        <label htmlFor="deadline">Deadline</label>
+        <label>Deadline:</label>
         <input
-          id="deadline"
           type="date"
           name="deadline"
           value={formData.deadline}
           onChange={handleChange}
-          min={new Date().toISOString().split('T')[0]}
           required
         />
       </div>
-      
-      <div className="form-actions">
-        <button type="submit">{initialData.id ? 'Update' : 'Add'} Goal</button>
-        {initialData.id && (
-          <button type="button" onClick={onCancel}>Cancel</button>
-        )}
-      </div>
+      <button type="submit">{selectedGoal ? 'Update Goal' : 'Add Goal'}</button>
+      {selectedGoal && (
+        <button type="button" onClick={() => setSelectedGoal(null)}>
+          Cancel
+        </button>
+      )}
     </form>
   );
 }
+
+export default GoalForm;

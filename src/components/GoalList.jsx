@@ -1,24 +1,25 @@
-
 import GoalItem from './GoalItem';
 
-export default function GoalList({ goals, onEdit, onDelete }) {
+function GoalList({ goals, deleteGoal, setSelectedGoal }) {
   return (
-    <section className="goal-list">
-      <h2>Your Savings Goals</h2>
+    <div className="goal-list">
+      <h2>Your Goals</h2>
       {goals.length === 0 ? (
-        <p className="empty-message">No goals found. Add your first savings goal!</p>
+        <p>No goals yet. Add your first goal!</p>
       ) : (
-        <div className="goals-grid">
-          {goals.map(goal => (
-            <GoalItem 
-              key={goal.id} 
-              goal={goal} 
-              onEdit={onEdit} 
-              onDelete={onDelete} 
+        <div className="goals-container">
+          {goals.map((goal) => (
+            <GoalItem
+              key={goal.id}
+              goal={goal}
+              deleteGoal={deleteGoal}
+              setSelectedGoal={setSelectedGoal}
             />
           ))}
         </div>
       )}
-    </section>
+    </div>
   );
 }
+
+export default GoalList;
